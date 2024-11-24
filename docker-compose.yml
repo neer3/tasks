@@ -1,0 +1,33 @@
+version: "3.0"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    working_dir: /projects/mysql
+    volumes:
+      - /home/neer/Desktop/projects/mysqll:/projects/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    tty: true
+  tasks:
+    build:
+      context: /home/neer/Desktop/projects/tasks
+      dockerfile: Dockerfile.container
+      args:
+        port: 4501
+        node: 16.17.0
+        ruby: 3.1.2
+        bundle: 2.3.3
+    image: tasks
+    container_name: tasks
+    working_dir: /root/src
+    volumes:
+      - /home/neer/Desktop/projects/tasks:/root/src
+    depends_on:
+      - "mysql"
+    ports:
+      - "4501:4501"
+    tty: true
